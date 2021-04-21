@@ -8,8 +8,8 @@ const ROUTE_NAME = 'slack';
  * GET METHOD
  */
 router.get('/', (req: Request, res: Response, next: NextFunction) => {
-  const { message } = req.query as any;
-  sendMessage('testbot', message);
+  const { message, channel = 'testbot' } = req.query as any;
+  sendMessage(channel, message);
   res.status(200).json({
     message: `Handling GET requests to /${ROUTE_NAME} success`
   })
@@ -26,6 +26,20 @@ router.post('/', (req: Request, res: Response, next: NextFunction) => {
     ...req.body
   })
 });
+
+/**
+ * POST METHOD
+ */
+ router.post('/read-my-request', (req: Request, res: Response, next: NextFunction) => {
+  console.log('data', req.body);
+  const { channel = 'testbot', text } = req.body as any;
+  sendMessage(channel, `I got your command ${text}`);
+  res.status(200).json({
+    message: `Handling POST requests to /${ROUTE_NAME}`,
+    ...req.body
+  })
+});
+
 
 /**
  * PUT METHOD
