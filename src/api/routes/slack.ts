@@ -1,17 +1,31 @@
 
 import express, { Router, Request, Response, NextFunction } from 'express';
 const router: Router = express.Router();
-import { sendMessage } from '../providers/slack';
+import { sendMessage, sendMarkdownMessage } from '../providers/slack';
 
 const ROUTE_NAME = 'slack';
 /**
  * GET METHOD
  */
 router.get('/', (req: Request, res: Response, next: NextFunction) => {
-  const { message, channel = 'testbot' } = req.query as any;
+  const { message, channel } = req.query as any;
   sendMessage(channel, message);
   res.status(200).json({
     message: `Handling GET requests to /${ROUTE_NAME} success`
+  })
+});
+
+/**
+ * POST METHOD
+ */
+ router.get('/send-markdown-message', (req: Request, res: Response, next: NextFunction) => {
+  console.log('data', req.body);
+  const { channel } = req.query as any;
+  // sendMessage(channel, `I got your command ${text}`);
+  sendMarkdownMessage(channel);
+  res.status(200).json({
+    message: `Handling POST requests to /${ROUTE_NAME}`,
+    ...req.body
   })
 });
 
@@ -32,13 +46,14 @@ router.post('/', (req: Request, res: Response, next: NextFunction) => {
  */
  router.post('/read-my-request', (req: Request, res: Response, next: NextFunction) => {
   console.log('data', req.body);
-  const { channel = 'testbot', text } = req.body as any;
+  const { channel, text } = req.body as any;
   sendMessage(channel, `I got your command ${text}`);
   res.status(200).json({
     message: `Handling POST requests to /${ROUTE_NAME}`,
     ...req.body
   })
 });
+
 
 
 /**

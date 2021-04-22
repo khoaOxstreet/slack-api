@@ -3,7 +3,7 @@
 import { WebClient } from '@slack/web-api';
 import { createEventAdapter } from '@slack/events-api';
 import { SlackEventType, BotInfoType } from '../type/slack';
-
+import { buildTableMarkdownSection, TestData } from './slack-lib';
 const SLACK_TOKEN = process.env.SLACK_TOKEN || 'xoxb-751028319104-1982052749219-7zdPPHYG3MB0tQzxQjyxfc0E';
 const SLACK_SIGNING_SECRET = process.env.SLACK_SIGNING_SECRET || 'cf30deca6078a4bd4ba9f7237717c577';
 
@@ -57,4 +57,12 @@ export const sendMessage = async (channel: string = 'testbot', text: string) => 
     channel,
   });
   console.log('Sent succss');
+}
+
+export const sendMarkdownMessage = async (channel: string = 'testbot') => {
+  await webClient.chat.postMessage({
+    channel,
+    text: '',
+    blocks: buildTableMarkdownSection(TestData.table)
+  });
 }
