@@ -1,7 +1,8 @@
 
 import express, { Router, Request, Response, NextFunction } from 'express';
 const router: Router = express.Router();
-import { sendMessage, sendMarkdownMessage } from '../providers/slack';
+import { sendMessage, sendMarkdownMessage, sendMarkDownTableMessage } from '../providers/slack';
+import { buildBlockMarkdownSection } from '../providers/slack-lib';
 import { getPrices, getOffers, getPrice, getOffer } from '../providers/price-engine';
 const ROUTE_NAME = 'slack';
 /**
@@ -57,11 +58,12 @@ router.post('/', (req: Request, res: Response, next: NextFunction) => {
 router.post('/prices', async (req: Request, res: Response, next: NextFunction) => {
   try {
     console.log('prices data', req.body);
-    const { channel_id = 'testbot', text } = req.body as any;
-    console.log('channel_id', channel_id);
-    sendMessage(channel_id, `Getting Prices from ${text}`);
-    const result = await getPrices(text);
-    sendMessage(channel_id, JSON.stringify(result));
+    const { channel_id = 'testbot', text, user_id } = req.body as any;
+    const [sku, currency ] = text.split(' ');
+    const skuNumber = sku.replace(/-/g, ' ').trim().toUpperCase();
+    const title = `<@${user_id}> has requested prices from SKU: *${skuNumber}* ${currency ? `with CURRENCY *${currency}*` : ''}`;
+    const result = await getPrices(skuNumber, currency);
+    sendMarkDownTableMessage(channel_id, title, result);
     res.status(200).json({
       message: `Handling POST requests to /${ROUTE_NAME}`,
       ...req.body
@@ -76,10 +78,12 @@ router.post('/prices', async (req: Request, res: Response, next: NextFunction) =
 router.post('/price', async (req: Request, res: Response, next: NextFunction) => {
   try {
     console.log('prices data', req.body);
-    const { channel_id = 'testbot', text } = req.body as any;
-    sendMessage(channel_id, `Getting Price from ${text}`);
-    const result = await getPrice(text);
-    sendMessage(channel_id, JSON.stringify(result));
+    const { channel_id = 'testbot', text, user_id } = req.body as any;
+    const [sku, size, currency ] = text.split(' ');
+    const skuNumber = sku.replace(/-/g, ' ').trim();
+    const title = `<@${user_id}> has requested price from SKU: *${skuNumber}* SIZE *${size}* ${currency ? ` CURRENCY *${currency}*` : ''}`;
+    const result = await getPrice(skuNumber, size, currency);
+    sendMarkDownTableMessage(channel_id, title, [result]);
     res.status(200).json({
       message: `Handling POST requests to /${ROUTE_NAME}`,
       ...req.body
@@ -94,10 +98,12 @@ router.post('/price', async (req: Request, res: Response, next: NextFunction) =>
 router.post('/offers', async (req: Request, res: Response, next: NextFunction) => {
   try {
     console.log('prices data', req.body);
-    const { channel_id = 'testbot', text } = req.body as any;
-    sendMessage(channel_id, `Getting Offers from ${text}`);
-    const result = await getOffers(text);
-    sendMessage(channel_id, JSON.stringify(result));
+    const { channel_id = 'testbot', text, user_id } = req.body as any;
+    const [sku, currency ] = text.split(' ');
+    const skuNumber = sku.replace(/-/g, ' ').trim();
+    const title = `<@${user_id}> has requested offers from SKU: *${skuNumber}* ${currency ? `with CURRENCY *${currency}*` : ''}`;
+    const result = await getOffers(skuNumber, currency);
+    sendMarkDownTableMessage(channel_id, title, result);
     res.status(200).json({
       message: `Handling POST requests to /${ROUTE_NAME}`,
       ...req.body
@@ -112,10 +118,12 @@ router.post('/offers', async (req: Request, res: Response, next: NextFunction) =
 router.post('/offer', async (req: Request, res: Response, next: NextFunction) => {
   try {
     console.log('prices data', req.body);
-    const { channel_id = 'testbot', text } = req.body as any;
-    sendMessage(channel_id, `Getting Offer from ${text}`);
-    const result = await getOffer(text);
-    sendMessage(channel_id, JSON.stringify(result));
+    const { channel_id = 'testbot', text, user_id } = req.body as any;
+    const [sku, size, currency ] = text.split(' ');
+    const skuNumber = sku.replace(/-/g, ' ').trim();
+    const title = `<@${user_id}> has requested offer from SKU: *${skuNumber}* SIZE ${size} ${currency ? `with CURRENCY *${currency}*` : ''}`;
+    const result = await getOffer(skuNumber, size, currency);
+    sendMarkDownTableMessage(channel_id, title, [result]);
     res.status(200).json({
       message: `Handling POST requests to /${ROUTE_NAME}`,
       ...req.body
