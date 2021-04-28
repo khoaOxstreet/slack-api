@@ -1,23 +1,21 @@
 import Discord from 'discord.js';
-const client = new Discord.Client();
-const commands = new Discord.Collection();
+const client: any = new Discord.Client();
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN || 'ODM2ODQ5Mjk0NTA1OTM0ODc4.YIj-ow.XgrWuv-mQG46CJrk4KJRdcnBdOg';
 import SlashCommand, { commandsInitalization, OptionResponse, convertToObject } from './slash-command';
 import { getPrices, getOffers, getPrice, getOffer } from '../price-engine';
 
-const GUILD_ID = '836528929829027850'; // SERVER WIDGET
+const GUILD_ID = process.env.GUILD_ID || ''; //'836528929829027850'; // SERVER WIDGET
 
 import { TestData, buildTableMarkdownSection } from './discord-text';
 
-const slashCommand = new SlashCommand(client, '');
+const slashCommand = new SlashCommand(client, GUILD_ID);
 
 client.on('ready', async () => {
   console.log('Client is ready');
   slashCommand.buildCommands(commandsInitalization);
 })
 
-commands.set('testing', 'testing');
-client.on('message', msg => {
+client.on('message', (msg: any) => {
   console.log('message is', msg.content);
   if (msg.content === 'ping') {
     msg.reply('pong');
@@ -38,6 +36,7 @@ client.on('message', msg => {
   }
 });
 
+/* tslint:disable */
 client.ws.on('INTERACTION_CREATE' as any, async (interaction: any) => {
   const { options = [], name } = interaction.data;
   const command = name.toLowerCase();
