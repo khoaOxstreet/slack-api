@@ -2,7 +2,7 @@ import express, { Application, Request, Response, NextFunction } from 'express';
 import ErrorType, { handleError } from './utils/error';
 import { slackEvents } from './api/providers/slack';
 import slackRoutes from './api/routes/slack';
-
+import './api/providers/discord';
 const app: Application = express();
 
 // app.use(express.json());
