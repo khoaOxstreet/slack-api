@@ -76,6 +76,20 @@ export default class SlashCommand {
   }
 }
 
+export interface OptionResponse {
+  name: string;
+  value: any;
+}
+
+export const convertToObject = (options: OptionResponse[]) => {
+  const result: any = {};
+  options.forEach((option) => {
+    result[option.name] = option.value;
+  });
+  return result;
+}
+
+
 export const commandsInitalization: CommandType[] = [
   {
     name: 'testing',
@@ -83,10 +97,76 @@ export const commandsInitalization: CommandType[] = [
   },
   {
     name: 'prices',
-    description: 'Get Prices by Sku and Currency',
+    description: 'Get Prices by Sku and Currency (Default SGD)',
     options: [
       {
         name: 'sku',
+        description: 'Sku number',
+        required: true,
+        type: 3
+      },
+      {
+        name: 'currency',
+        description: 'Currency',
+        required: false,
+        type: 3
+      }
+    ]
+  },
+  {
+    name: 'offers',
+    description: 'Get Offers by Sku and Currency (Default SGD)',
+    options: [
+      {
+        name: 'sku',
+        description: 'Sku number',
+        required: true,
+        type: 3
+      },
+      {
+        name: 'currency',
+        description: 'Currency',
+        required: false,
+        type: 3
+      }
+    ]
+  },
+  {
+    name: 'price',
+    description: 'Get Price by Sku and Size and Currency (Default SGD)',
+    options: [
+      {
+        name: 'sku',
+        description: 'Sku number',
+        required: true,
+        type: 3
+      },
+      {
+        name: 'size',
+        description: 'Sku number',
+        required: true,
+        type: 3
+      },
+      {
+        name: 'currency',
+        description: 'Currency',
+        required: false,
+        type: 3
+      }
+    ]
+  },
+  {
+    name: 'offer',
+    description: 'Get Offer by Sku and Size and Currency (Default SGD)',
+    options: [
+      {
+        name: 'sku',
+        description: 'Sku number',
+        required: true,
+        type: 3
+      },
+      {
+        name: 'size',
         description: 'Sku number',
         required: true,
         type: 3

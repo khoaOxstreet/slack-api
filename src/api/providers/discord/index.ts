@@ -2,7 +2,7 @@ import Discord from 'discord.js';
 const client = new Discord.Client();
 const commands = new Discord.Collection();
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN || 'ODM2ODQ5Mjk0NTA1OTM0ODc4.YIj-ow.XgrWuv-mQG46CJrk4KJRdcnBdOg';
-import SlashCommand, { commandsInitalization } from './slash-command';
+import SlashCommand, { commandsInitalization, OptionResponse, convertToObject } from './slash-command';
 
 const GUILD_ID = '836528929829027850'; // SERVER WIDGET
 
@@ -48,6 +48,8 @@ client.ws.on('INTERACTION_CREATE' as any, async (interaction: any) => {
       slashCommand.reply(interaction, buildTableMarkdownSection(TestData.table));
     }
     case 'prices': {
+      const data = convertToObject(options);
+      console.log('data', data);
       slashCommand.reply(interaction, `You requested input data ${options.map((e: any) => `${e.name} = ${e.value}`).join(' & ')}`);
     }
   }
