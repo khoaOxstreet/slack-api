@@ -1,4 +1,4 @@
-const CELL_WIDTH = 20;
+const CELL_WIDTH = 10;
 export const fillStr = (str: string) =>  str + ' '.repeat(CELL_WIDTH- str.length);
 
 export const TestData = {
@@ -13,7 +13,7 @@ export const buildTableMarkdownSection = (data: any[], header: string[] = []) =>
   let tableHeaders = header.length > 0 ? header : (data.length > 0 ? Object.keys(data[0]) : []);
   console.log(tableHeaders);
   if (tableHeaders.length > 0) {
-    const markdownHeader = '**' + tableHeaders.map((h: string) => fillStr(h)).join('') + '**';
+    const markdownHeader = '**' + tableHeaders.map((h: string) => fillStr(h)).join('').toUpperCase() + '**';
     blocks.push(markdownHeader);
   }
   const dataRows: string[] = data.map((e: any) => Object.keys(e).map(key => fillStr(e[key])).join(''));
