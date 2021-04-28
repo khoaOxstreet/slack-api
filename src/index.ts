@@ -26,9 +26,12 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-// app.get('/', (req: Request, res: Response, next: NextFunction) => {
-//   res.send('healthy')
-// });
+app.get('/', (req: Request, res: Response, next: NextFunction) => {
+  res.send('healthy')
+});
+app.get('/healthcheck', (req: Request, res: Response, next: NextFunction) => {
+  res.send('healthy')
+});
 
 app.use(express.json());
 app.use(express.urlencoded({
