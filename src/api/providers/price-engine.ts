@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const PRICE_ENGINE_URL = process.env.PRICE_ENGINE_URL || 'http://pricing.oxstreet.com/api';
+const PRICE_ENGINE_URL = process.env.PRICE_ENGINE_URL || 'https://pricing.oxstreet.com/api';
 
 const ROW_LENGTH = 10;
 const fillStr = (str: string): string => ' '.repeat(ROW_LENGTH - str.length) + str;
