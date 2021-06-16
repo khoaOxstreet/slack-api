@@ -1,9 +1,9 @@
 import Discord from 'discord.js';
 const client: any = new Discord.Client();
-const DISCORD_TOKEN = process.env.DISCORD_TOKEN || 'ODM2ODQ5Mjk0NTA1OTM0ODc4.YIj-ow.XgrWuv-mQG46CJrk4KJRdcnBdOg';
+const DISCORD_TOKEN = process.env.DISCORD_TOKEN || 'ODM4NTk5ODc2NDI5MzQ4OTA0.YI9c_g.ueZZtAtSmOoumC8ffqfJCtINskI' || 'ODM2ODQ5Mjk0NTA1OTM0ODc4.YIj-ow.XgrWuv-mQG46CJrk4KJRdcnBdOg';
 import SlashCommand, { commandsInitalization, OptionResponse, convertToObject } from './slash-command';
 import { getPriceFromCache, getPricesFromCache, getOffersFromCache, getOfferFromCache } from '../../cache';
-const GUILD_ID = process.env.GUILD_ID || '836528929829027850'; //'836528929829027850'; // SERVER WIDGET
+const GUILD_ID = process.env.GUILD_ID || ''; //'836528929829027850'; // SERVER WIDGET
 
 import { TestData, buildTableMarkdownSection } from './discord-text';
 
